@@ -1,4 +1,5 @@
-import { Controller, Get, Inject, Param } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { UserDto } from 'src/dto/user/user';
 import { User } from 'src/models/user.entity';
 import { UserService } from 'src/services/user.service';
 
@@ -15,5 +16,11 @@ export class UserController {
   @Get('/id/:id')
   public getUserById(@Param('id') id: number): Promise<User> {
     return this.userService.findById(id);
+  }
+
+  @Post()
+  public createUser(@Body() user: UserDto) {
+    console.log({ user })
+    return this.userService.createTestUser();
   }
 }
