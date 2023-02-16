@@ -8,7 +8,10 @@ import { AuthController } from './controllers/auth/auth.controller';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env'
+    }),
     DbModule,
     AuthModule
   ],
