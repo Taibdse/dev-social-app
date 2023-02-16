@@ -1,15 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/models/user.entity';
 import { Repository } from 'typeorm';
 import { OAuth2Client } from 'google-auth-library';
+import { SignUpReqDto } from 'src/dto/user/auth/auth';
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService {
   constructor() {
     this.googleAuthClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-    console.log({ client: this.googleAuthClient });
   }
 
   private googleAuthClient: OAuth2Client;
@@ -19,11 +20,27 @@ export class AuthService {
   @Inject(JwtService)
   private jwtService: JwtService;
 
-  async validateUser(username: string, pass: string): Promise<any> {
+  async signUp(signUpReqDto: SignUpReqDto) {
+    const isUsernameExisted = await this.userRepository.exist({ where: { username: signUpReqDto.username } });
+    if (!isUsernameExisted) {
+      const hashedPassword = await bcrypt.hash(signUpReqDto.password, 10);
+      const savedUser = { ...signUpReqDto, password: hashedPassword }
+      return this.userRepository.save(savedUser);
+    } else {
+      throw new BadRequestException('Username is already existed!');
+    }
+  }
+
+  async validateUser(username: string, password: string): Promise<any> {
     const user = await this.userRepository.findOne({ where: { username } });
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
-      return result;
+    if (user) {
+      const matched = await bcrypt.compare(password, user.password);
+      if (matched) {
+        const { password, ...result } = user;
+        return result;
+      } else {
+        return null
+      }
     }
     return null;
   }

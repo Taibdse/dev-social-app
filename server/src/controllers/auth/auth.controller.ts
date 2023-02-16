@@ -1,6 +1,6 @@
 import { Controller, Post, Request, UseGuards, Get } from '@nestjs/common';
 import { Body, Inject } from '@nestjs/common/decorators';
-import { GoogleLoginReqDto } from 'src/dto/user/auth/auth';
+import { GoogleLoginReqDto, SignUpReqDto } from 'src/dto/user/auth/auth';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { GoogleAuthGuard } from 'src/modules/auth/gogle-auth.guard';
 import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
@@ -11,6 +11,11 @@ export class AuthController {
 
   @Inject(AuthService)
   private authService: AuthService;
+
+  @Post('/signup')
+  signup(@Body() signUpReqDto: SignUpReqDto) {
+    return this.authService.signUp(signUpReqDto);
+  }
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
