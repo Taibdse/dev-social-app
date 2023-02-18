@@ -16,7 +16,7 @@ import { User } from 'src/models/user.entity';
       // autoLoadEntities: true,
       entities: [User],
       synchronize: false,
-      logger: 'file',
+      logger: 'advanced-console',
       logging: 'all'
     }),
     TypeOrmModule.forFeature([User]),

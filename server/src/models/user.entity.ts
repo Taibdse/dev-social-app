@@ -53,6 +53,9 @@ export class User {
   @Column({ type: 'varchar', length: 1000, nullable: true })
   availableFor: string;
 
+  @Column({ type: 'varchar', length: 250, nullable: true })
+  refreshToken: string
+
   @Column({ type: 'boolean', default: true })
   isActive: boolean
 

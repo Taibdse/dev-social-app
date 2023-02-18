@@ -1,10 +1,12 @@
 import { Controller, Post, Request, UseGuards, Get } from '@nestjs/common';
-import { Body, Inject } from '@nestjs/common/decorators';
-import { GoogleLoginReqDto, SignUpReqDto } from 'src/dto/user/auth/auth';
-import { AuthService } from 'src/modules/auth/auth.service';
-import { GoogleAuthGuard } from 'src/modules/auth/gogle-auth.guard';
-import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
-import { LocalAuthGuard } from 'src/modules/auth/local-auth.guard';
+import { Body, Inject, Req } from '@nestjs/common/decorators';
+import { GoogleLoginReqDto, RefreshTokenReqDto, SignUpReqDto } from 'src/dto/auth';
+import { AuthService } from 'src/modules/auth/services/auth.service';
+import { GoogleAuthGuard } from 'src/modules/auth/guards/google-auth.guard';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+import { LocalAuthGuard } from 'src/modules/auth/guards/local-auth.guard';
+import { RefreshTokenAuthGuard } from 'src/modules/auth/guards/refresh-token-auth.guard';
+import { Request as ExpressReq } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -50,6 +52,15 @@ export class AuthController {
       message: 'User information from google',
       user: req.user
     }
+  }
+
+  @UseGuards(RefreshTokenAuthGuard)
+  @Get('refresh')
+  refreshTokens(@Req() req: ExpressReq & { user: any }) {
+    console.log({ reqUser: req.user })
+    const userId = req.user['userId'];
+    const refreshToken = req.user['refreshToken'];
+    return this.authService.refreshTokens(userId, refreshToken);
   }
 
 
