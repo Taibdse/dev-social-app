@@ -1,12 +1,16 @@
 version: 0.2
 
 phases:
+ install:
+    runtime-versions:
+      nodejs: 18
   build:
     commands:
+       - echo Build started on `date`
        - cd server
        - echo Start installing and building
        - npm ci && npm run build # clean install (npm ci) and build (npm run build)
-       - echo End installing and building
+       - echo End installing and building on `date`
 
 artifacts:
   files:
