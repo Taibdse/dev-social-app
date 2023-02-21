@@ -6,12 +6,13 @@ import { Repository } from 'typeorm';
 import { OAuth2Client } from 'google-auth-library';
 import { SignUpReqDto, Tokens } from 'src/dto/auth';
 import * as bcrypt from "bcrypt";
-import { JWT_ACCESS_SECRET_KEY, JWT_REFRESH_SECRET_KEY } from 'src/common/constants/app';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor() {
-    this.googleAuthClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  constructor(private configService: ConfigService) {
+    const googleClientId = configService.get('GOOGLE_CLIENT_ID');
+    this.googleAuthClient = new OAuth2Client(googleClientId);
   }
 
   private googleAuthClient: OAuth2Client;
@@ -21,13 +22,18 @@ export class AuthService {
   @Inject(JwtService)
   private jwtService: JwtService;
 
+  // @Inject(ConfigService)
+  // configService: ConfigService;
+
   hashData(data: string) {
     return bcrypt.hash(data, 10);
   }
 
   getTokens(userId: number, username: string): Tokens {
-    const accessToken = this.jwtService.sign({ userId, username }, { secret: JWT_ACCESS_SECRET_KEY, expiresIn: '15m' });
-    const refreshToken = this.jwtService.sign({ userId, username }, { secret: JWT_REFRESH_SECRET_KEY, expiresIn: '7d' });
+    const accessTokenSecret = this.configService.get('JWT_ACCESS_SECRET_KEY');
+    const refreshTokenSecret = this.configService.get('JWT_REFRESH_SECRET_KEY');
+    const accessToken = this.jwtService.sign({ userId, username }, { secret: accessTokenSecret, expiresIn: '15m' });
+    const refreshToken = this.jwtService.sign({ userId, username }, { secret: refreshTokenSecret, expiresIn: '7d' });
     return { accessToken, refreshToken }
   }
 
@@ -86,7 +92,7 @@ export class AuthService {
     try {
       const ticket = await this.googleAuthClient.verifyIdToken({
         idToken,
-        audience: process.env.GOOGLE_CLIENT_ID,
+        audience: this.configService.get('GOOGLE_CLIENT_ID'),
       });
       const payload = ticket.getPayload();
       console.log({ payload, ticket });

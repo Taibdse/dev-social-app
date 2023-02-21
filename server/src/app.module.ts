@@ -5,10 +5,14 @@ import { UserService } from './services/user.service';
 import { DbModule } from './modules/db/db.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthController } from './controllers/auth/auth.controller';
+import { loadEnvVariables } from './config/env-variables.config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [loadEnvVariables]
+    }),
     DbModule,
     AuthModule
   ],

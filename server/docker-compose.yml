@@ -1,0 +1,40 @@
+services:
+  server:
+    container_name: dev-social-server
+    networks:
+      - postgres
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development # Only will build development stage from dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - .env
+    command: npm run start:dev
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    container_name: dev-social-postgres
+    networks:
+      - postgres
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - ${DATABASE_PORT}:5432
+    volumes:
+      - /data/postgres:/data/postgres
+
+networks:
+  postgres:
+    driver: bridge
