@@ -20,9 +20,9 @@ async function bootstrap() {
   const app: INestApplication = await NestFactory.create(AppModule);
   const configService = app.get<ConfigService>(ConfigService);
   const port = configService.get('PORT');
-
+  const apiPrefix = configService.get('API_PREFIX');
   setUpSwagger(app, configService);
-  app.setGlobalPrefix('/api');
+  app.setGlobalPrefix(apiPrefix);
   await app.listen(port, () => console.log(`Server is running on port ${port}`));
 }
 

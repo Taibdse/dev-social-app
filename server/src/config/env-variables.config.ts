@@ -2,6 +2,7 @@ export const loadEnvVariables = () => ({
   // App info
   PORT: Number(process.env.PORT) || 3001,
   APP_NAME: process.env.APP_NAME || 'app_name',
+  API_PREFIX: process.env.API_PREFIX || '/api',
 
   // Jwt Secrets
   JWT_ACCESS_SECRET_KEY: process.env.JWT_ACCESS_SECRET_KEY || 'Wv9r63DcCCuCgI0Rvp9dShHj9bhnLPs910+bYYRNmqBTvNLLUHxvFrCNdhu6lUoq/hBgVksoSPNqrbRdWYIaXC54EvW0fM3PQn6LFC45F2+pAJYLYeucGbc+AaWQumWp2p1cEhQXSiRWHk096Y520+/8EfiM0z1iaJzbTTxzZc4x8z/GEMM24qRduxGmUqpK5I3l7qwNHDVHkMixztMYXkxKcP2FrkCodGMu3vjHsqNLeMneCgxmZNmtwvC3L/+QK5VnevZxGhzov8iVIpJCugXnaK7sLLPpi77JQHgmUrteKPBRjm6BBkqNVpikYhwemgzOwNj0DdPN84i2Td2jgQ==',
