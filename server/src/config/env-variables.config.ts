@@ -14,6 +14,7 @@ export const loadEnvVariables = () => ({
   DATABASE_USERNAME: process.env.DATABASE_USERNAME || 'postgres',
   DATABASE_PASSWORD: process.env.DATABASE_PASSWORD || '123456',
   DATABASE_NAME: process.env.DATABASE_NAME || 'dev-social-db',
+  DATABASE_SYNCHRONIZE: process.env.DATABASE_SYNCHRONIZE || false,
 
   // Google Oauth API
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '716210926361-175bh84udemm9h6gptt8ikcq685nr3o5.apps.googleusercontent.com',

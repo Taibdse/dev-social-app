@@ -14,9 +14,14 @@ import { User } from 'src/models/user.entity';
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        // autoLoadEntities: true,
+        autoLoadEntities: false,
         entities: [User],
-        synchronize: true,
+        // entities: ['src/models/*.entity.{js,ts}'],
+        // entities: [
+        //   "dist/**/*.entity{.ts,.js}",
+        //   "src/**/*.entity{.ts,.js}"
+        // ],
+        synchronize: false,
         logger: 'advanced-console',
         logging: 'all'
       })
