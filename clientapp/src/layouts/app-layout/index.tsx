@@ -18,16 +18,20 @@ const navigation = [
 ];
 
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
+  { name: 'Dashboard', href: '#' },
+  { name: 'Create Post', href: '#' },
+  { name: 'Reading list', href: '#' },
   { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Signout', href: '#' },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Example() {
+export default function AppLayout(props: any) {
+  const { children } = props;
+
   return (
     <>
       {/*
@@ -54,7 +58,19 @@ export default function Example() {
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
-                        {navigation.map((item) => (
+                        <div className="mt-1 flex rounded-md shadow-sm">
+                          <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">
+                            http://
+                          </span>
+                          <input
+                            type="text"
+                            name="company-website"
+                            id="company-website"
+                            className="block w-full flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            placeholder="www.example.com"
+                          />
+                        </div>
+                        {/* {navigation.map((item) => (
                           <a
                             key={item.name}
                             href={item.href}
@@ -68,7 +84,7 @@ export default function Example() {
                           >
                             {item.name}
                           </a>
-                        ))}
+                        ))} */}
                       </div>
                     </div>
                   </div>
@@ -215,7 +231,7 @@ export default function Example() {
         </header>
         <main>
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-            {/* Your content */}
+            {children}
           </div>
         </main>
       </div>
